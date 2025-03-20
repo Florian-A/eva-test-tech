@@ -20,8 +20,6 @@
     </div>
   </template>
   
-  #### **Vue Script (index.vue):**
-  ```javascript
   <script>
   export default {
     data() {
@@ -63,11 +61,10 @@
           // Convert amount to "drops" (1 XRP = 1,000,000 drops)
           const amountInDrops = this.amount * 1000000;
   
-          // Construct the payload
+          // Construct the payload (without 'Account' field, which is handled by XUMM)
           const payload = {
             transaction: {
               TransactionType: 'Payment',
-              Account: this.account,  // The connected user's address
               Amount: amountInDrops,  // Convert XRP to drops
               Destination: this.recipientAddress,  // Recipient's address
             }
@@ -78,15 +75,22 @@
           // Send the payload to XUMM for approval
           const response = await this.xumm.payload.create(payload);
   
-          // Check the response from XUMM
+          // Log the response for debugging
+          console.log('XUMM Payload Response:', response);
+  
+          // Check the response and handle accordingly
           if (response && response.uuid) {
-            console.log('Payload created:', response);
-            window.location.href = `xumm://payload/${response.uuid}`;  // Redirect user to XUMM for approval
+            console.log('Payload created successfully:', response);
+            // Redirect user to XUMM for approval
+            window.location.href = `xumm://payload/${response.uuid}`;
           } else {
-            throw new Error(`Failed to create payload. Response: ${JSON.stringify(response)}`);
+            // Additional log for null response
+            console.error('Failed to create payload. Response:', response);
+            alert('Failed to create the transaction. Please check the console for detailed error messages.');
           }
         } catch (error) {
           console.error('Error sending transaction:', error);
+          alert('There was an error creating the transaction. Please check the console for details.');
         }
       }
     },
@@ -111,8 +115,6 @@
   };
   </script>
   
-  #### **Vue Style (index.vue):**
-  ```css
   <style scoped>
   .wallet-connection {
     text-align: center;

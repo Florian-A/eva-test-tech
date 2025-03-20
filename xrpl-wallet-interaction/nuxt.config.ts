@@ -3,9 +3,8 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
 
   runtimeConfig: {
-    public: {
-      XUMM_API_KEY: process.env.XUMM_API_KEY,
-    },
+    XUMM_API_KEY: process.env.XUMM_API_KEY,
+    
   },
 
   app: {
