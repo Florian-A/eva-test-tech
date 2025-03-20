@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  nuxt-app:
+    build: .
+    container_name: nuxt-container
+    ports:
+      - "4454:4454"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: ["npm", "run", "dev", "--", "--port", "4454", "--host"]
